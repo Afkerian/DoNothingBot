@@ -4,7 +4,8 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 public class Main {
     public static void main(String[] args) {
-        System.out.println("Hello, World!");
+        System.out.println("Load Bot");
+        SQLIte.connection= SQLIte.connect();
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
             botsApi.registerBot(new Nothing());

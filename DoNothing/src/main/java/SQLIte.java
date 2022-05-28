@@ -1,7 +1,4 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class SQLIte {
     static Connection connection = null;
@@ -14,16 +11,15 @@ public class SQLIte {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:DoNothingBot.db");
             return connection;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
+        } catch (SQLException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static void saveRegister(Connection connection, String userID, String userName){
-        String query = "INSERT INTO user ( userID, nameUser) VALUES"
-                +"('" +userID +"', '"+userName+"');";
+    public static void saveRegister(Connection connection, String userID, String firstName, String lastName, String userName, String message, String idChat, String dateMessage, String nameChat){
+        String query = "INSERT INTO logsMessages ( userID, firstName, lastName, userName, message, idChat, dateMessage, nameChat) VALUES"
+                + "('"+userID+"', '"+firstName+"', '"+lastName+"', '"+userName+"', '"+message+"', '"+idChat+"', '"+dateMessage+"','"+nameChat+"');";
+
         Statement statement = null;
         try {
             statement = connection.createStatement();
@@ -37,19 +33,20 @@ public class SQLIte {
         }
     }
 
-    public static void joinGroups(Connection connection, String userID, String userName){
-        String query = "INSERT INTO user ( userID, nameUser) VALUES"
-                +"('" +userID +"', '"+userName+"');";
+    public  static ResultSet getBestUsers(Connection connection){
+        String query = "SELECT userName FROM logsMessages";
         Statement statement = null;
         try {
             statement = connection.createStatement();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        ResultSet resultSet = null;
         try {
-            statement.executeUpdate(query);
+            resultSet = statement.executeQuery(query);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return resultSet;
     }
 }
